@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package testing;
+
+
+message Person {
+  string transaction_id = 1;
+  uint64 from_user_id = 2;
+  uint64 to_user_id = 3;
+  string currency_symbol = 4;
+  string amount = 5;
+  string amount_usd = 6;
+  string opcode = 7;
+  string log_datetime = 8;
+  uint32 status = 9;
+  string created_at = 10;
+}

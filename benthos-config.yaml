@@ -1,0 +1,27 @@
+input:
+  label: ""
+  kafka:
+    addresses:
+      - localhost:9092
+    topics:
+      - local_statistics:0
+    consumer_group: "benthos"
+    checkpoint_limit: 1024
+
+pipeline:
+  processors:
+    - protobuf:
+        operator: "to_json"
+        message: testing.Person
+        import_paths: [ testing/schema ]
+
+output:
+  sql_insert:
+    driver: clickhouse
+    dsn: clickhouse://localhost:9000
+    table: transaction
+    columns: [ transaction_id, from_user_id, to_user_id, currency_symbol, amount ]
+    args_mapping: |
+      root = [
+        this.transactionId, this.fromUserId.number().ceil(), this.toUserId.number().ceil(), this.currencySymbol, this.amount
+      ]
